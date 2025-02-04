@@ -1,0 +1,88 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\title{Documentação sobre Protocolos de Segurança: SSL, TLS e HTTPS}
+\author{Seu Nome}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introdução}
+Os protocolos SSL (Secure Sockets Layer), TLS (Transport Layer Security) e HTTPS (HyperText Transfer Protocol Secure) são fundamentais para a segurança na comunicação digital. Eles garantem confidencialidade, integridade e autenticação dos dados transmitidos na internet.
+
+\section{Objetivos e Funcionalidades}
+
+\subsection{SSL - Secure Sockets Layer}
+O SSL foi desenvolvido para fornecer segurança em conexões na web, protegendo contra interceptação de dados por meio de criptografia. Ele opera adicionando uma camada de segurança entre o protocolo de transporte (TCP) e o protocolo de aplicação (HTTP, FTP, etc.).
+
+\subsection{TLS - Transport Layer Security}
+TLS é a evolução do SSL, oferecendo maior segurança e eficiência. Seu objetivo principal é proteger a integridade e a privacidade da comunicação através da autenticação de servidores (e, opcionalmente, clientes) e criptografia robusta.
+
+\subsection{HTTPS - HyperText Transfer Protocol Secure}
+O HTTPS é um upgrade do HTTP, uma versão mais segura, onde a comunicação é protegida pelo TLS. Ele garante que os dados trocados entre cliente e servidor sejam criptografados e autenticados, prevenindo ataques como man-in-the-middle, ataques onde o invasor intercepta os dados, podendo alterá-los sem que as vítimas percebam.
+
+\section{Etapas de Segurança e Algoritmos}
+
+\subsection{Autenticação e Troca de Chaves}
+O processo de estabelecimento de uma conexão segura segue as seguintes etapas:
+
+\begin{enumerate}
+    \item Handshake SSL/TLS:
+    \begin{itemize}
+        \item Cliente e servidor negociam versões e algoritmos suportados.
+        \item O servidor envia seu certificado digital (emitido por uma Autoridade Certificadora).
+        \item O cliente verifica a validade do certificado e, caso válido, procede com a troca de chaves.
+    \end{itemize}
+    \item Troca de Chaves:
+    \begin{itemize}
+    \item Algoritmos como RSA (Rivest-Shamir-Adleman) ou Diffie-Hellman são usados para gerar e trocar chaves seguras.
+    \end{itemize}
+    \item Criptografia dos Dados:
+    \begin{itemize}
+    \item Os dados são protegidos com algoritmos simétricos como AES (Advanced Encryption Standard).
+    \end{itemize}
+    \item Integridade dos Dados:
+    \begin{itemize}
+    \item Uso de funções hash (SHA-2, SHA-3) e códigos de autenticação de mensagem (HMAC) para verificar a integridade da comunicação.
+    \end{itemize}
+\end{enumerate}
+
+\section{Evolução dos Protocolos}
+
+O SSL teve três versões principais (SSL 1.0, 2.0 e 3.0), mas todas foram descontinuadas devido a vulnerabilidades de segurança. O TLS surgiu como sucessor, com as seguintes versões:
+
+\begin{itemize}
+    \item \textbf{TLS 1.0 (1999)} - Primeira versão substituindo o SSL 3.0.
+    \item \textbf{TLS 1.1 (2006)} - Melhorias na proteção contra ataques de criptografia.
+    \item \textbf{TLS 1.2 (2008)} - Introdução do SHA-256 e maior segurança na troca de chaves.
+    \item \textbf{TLS 1.3 (2018)} - Redução da complexidade do handshake, maior eficiência e eliminação de algoritmos inseguros.
+\end{itemize}
+
+\section{Código Funcional em Python}
+O código abaixo demonstra uma conexão HTTPS em Python, verificando a validade do certificado:
+
+\begin{verbatim}
+import requests
+from requests.exceptions import SSLError
+import sys
+
+def run_client():
+    url = "https://localhost:4443"
+    try:
+        response = requests.get(url, verify="falsoserver.pem")
+        print("Resposta do servidor:", response.text)
+    except SSLError:
+        print("Erro: Certificado inválido! Conexão rejeitada.")
+        sys.exit(1)
+
+run_client()
+\end{verbatim}
+
+\section{Conclusão}
+A adoção de protocolos como TLS e HTTPS é essencial para garantir segurança na internet. A evolução dessas tecnologias reforça a proteção contra ataques e vulnerabilidades, tornando a comunicação digital mais confiável e eficiente.
+
+\end{document}
