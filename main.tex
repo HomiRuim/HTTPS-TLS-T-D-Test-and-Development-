@@ -1,7 +1,42 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{magenta}{rgb}{1,0,1}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\usepackage{amssymb}
+\usepackage{listings}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    inputencoding=utf8,
+    extendedchars=true,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morecomment=[s]{"""}{"""}
+}
 
 \title{Documentação sobre Protocolos de Segurança: SSL, TLS e HTTPS}
 \author{Seu Nome}
@@ -12,18 +47,50 @@
 \maketitle
 
 \section{Introdução}
-Os protocolos SSL (Secure Sockets Layer), TLS (Transport Layer Security) e HTTPS (HyperText Transfer Protocol Secure) são fundamentais para a segurança na comunicação digital. Eles garantem confidencialidade, integridade e autenticação dos dados transmitidos na internet.
+Os protocolos SSL (Secure Sockets Layer), TLS (Transport Layer Security) e HTTPS (HyperText Transfer Protocol Secure) são fundamentais para a segurança na comunicação digital. Eles garantem confidencialidade, integridade e autenticação dos dados transmitidos na internet, protegendo contra interceptações e ataques cibernéticos.
 
-\section{Objetivos e Funcionalidades}
+\section{Versões dos Protocolos e Melhorias}
 
 \subsection{SSL - Secure Sockets Layer}
-O SSL foi desenvolvido para fornecer segurança em conexões na web, protegendo contra interceptação de dados por meio de criptografia. Ele opera adicionando uma camada de segurança entre o protocolo de transporte (TCP) e o protocolo de aplicação (HTTP, FTP, etc.).
+O SSL foi desenvolvido inicialmente pela Netscape nos anos 90 para garantir segurança nas comunicações pela internet. Ele passou por três versões principais antes de ser substituído pelo TLS:
+
+\begin{itemize}
+\item \textbf{SSL 1.0} - Nunca foi lançado publicamente devido a falhas de segurança graves.
+\item \textbf{SSL 2.0} - Lançado em 1995, apresentava melhorias, mas ainda vulnerável a vários ataques.
+\item \textbf{SSL 3.0} - Introduzido em 1996, corrigiu diversas falhas do SSL 2.0, mas ainda possuía vulnerabilidades como o ataque POODLE.
+\end{itemize}
+
+Devido às falhas de segurança do SSL, ele foi oficialmente descontinuado e substituído pelo TLS.
 
 \subsection{TLS - Transport Layer Security}
-TLS é a evolução do SSL, oferecendo maior segurança e eficiência. Seu objetivo principal é proteger a integridade e a privacidade da comunicação através da autenticação de servidores (e, opcionalmente, clientes) e criptografia robusta.
+O TLS foi desenvolvido como uma versão mais segura do SSL e passou por diversas atualizações:
+
+\begin{itemize}
+\item \textbf{TLS 1.0 (1999)} - Baseado no SSL 3.0, mas com melhorias na segurança e resistência a ataques.
+\item \textbf{TLS 1.1 (2006)} - Introduziu proteções contra ataques de criptografia, como CBC (Cipher Block Chaining).
+\item \textbf{TLS 1.2 (2008)} - Adicionou suporte para novos algoritmos de criptografia, como AES e SHA-2, tornando a comunicação mais segura.
+\item \textbf{TLS 1.3 (2018)} - Melhorou a eficiência da comunicação, reduzindo a complexidade do handshake e removendo algoritmos inseguros como RC4 e SHA-1.
+\end{itemize}
+
+O TLS 1.3 é atualmente a versão mais segura e recomendada para garantir uma comunicação protegida na internet.
 
 \subsection{HTTPS - HyperText Transfer Protocol Secure}
-O HTTPS é um upgrade do HTTP, uma versão mais segura, onde a comunicação é protegida pelo TLS. Ele garante que os dados trocados entre cliente e servidor sejam criptografados e autenticados, prevenindo ataques como man-in-the-middle, ataques onde o invasor intercepta os dados, podendo alterá-los sem que as vítimas percebam.
+O HTTPS é a implementação do HTTP sobre uma camada segura de TLS, garantindo que os dados transmitidos sejam protegidos contra ataques. Ele segue a evolução do TLS e atualmente suporta as versões mais seguras desse protocolo.
+
+Os principais benefícios do HTTPS incluem:
+\begin{itemize}
+\item \textbf{Confidencialidade:} Os dados são criptografados, impedindo que terceiros os leiam.
+\item \textbf{Autenticação:} O uso de certificados digitais garante que o usuário está se comunicando com um servidor legítimo.
+\item \textbf{Integridade:} A tecnologia impede que os dados sejam alterados durante a transmissão.
+\end{itemize}
+
+O funcionamento do HTTPS ocorre da seguinte maneira:
+\begin{enumerate}
+\item O usuário acessa um site que utiliza HTTPS.
+\item O servidor envia seu certificado digital, garantindo sua autenticidade.
+\item O navegador verifica o certificado e estabelece uma conexão segura utilizando TLS.
+\item Todos os dados transmitidos entre o usuário e o servidor são criptografados, evitando que sejam interceptados.
+\end{enumerate}
 
 \section{Etapas de Segurança e Algoritmos}
 
@@ -31,58 +98,92 @@ O HTTPS é um upgrade do HTTP, uma versão mais segura, onde a comunicação é 
 O processo de estabelecimento de uma conexão segura segue as seguintes etapas:
 
 \begin{enumerate}
-    \item Handshake SSL/TLS:
-    \begin{itemize}
-        \item Cliente e servidor negociam versões e algoritmos suportados.
-        \item O servidor envia seu certificado digital (emitido por uma Autoridade Certificadora).
-        \item O cliente verifica a validade do certificado e, caso válido, procede com a troca de chaves.
-    \end{itemize}
-    \item Troca de Chaves:
-    \begin{itemize}
-    \item Algoritmos como RSA (Rivest-Shamir-Adleman) ou Diffie-Hellman são usados para gerar e trocar chaves seguras.
-    \end{itemize}
-    \item Criptografia dos Dados:
-    \begin{itemize}
-    \item Os dados são protegidos com algoritmos simétricos como AES (Advanced Encryption Standard).
-    \end{itemize}
-    \item Integridade dos Dados:
-    \begin{itemize}
-    \item Uso de funções hash (SHA-2, SHA-3) e códigos de autenticação de mensagem (HMAC) para verificar a integridade da comunicação.
-    \end{itemize}
+\item \textbf{Handshake SSL/TLS:}
+\begin{itemize}
+\item Cliente e servidor negociam versões e algoritmos suportados.
+\item O servidor envia seu certificado digital (emitido por uma Autoridade Certificadora).
+\item O cliente verifica a validade do certificado e, caso válido, procede com a troca de chaves.
+\end{itemize}
+\item \textbf{Troca de Chaves:}
+\begin{itemize}
+\item Algoritmos como RSA (Rivest-Shamir-Adleman) ou Diffie-Hellman são usados para gerar e trocar chaves seguras.
+\end{itemize}
+\item \textbf{Criptografia dos Dados:}
+\begin{itemize}
+\item Os dados são protegidos com algoritmos simétricos como AES (Advanced Encryption Standard).
+\end{itemize}
+\item \textbf{Integridade dos Dados:}
+\begin{itemize}
+\item Uso de funções hash (SHA-2, SHA-3) e códigos de autenticação de mensagem (HMAC) para verificar a integridade da comunicação.
+\end{itemize}
 \end{enumerate}
 
-\section{Evolução dos Protocolos}
+\section{Explicação do Código de Implementação em Python}
 
-O SSL teve três versões principais (SSL 1.0, 2.0 e 3.0), mas todas foram descontinuadas devido a vulnerabilidades de segurança. O TLS surgiu como sucessor, com as seguintes versões:
+O código a seguir demonstra a implementação de um servidor HTTPS e um cliente HTTPS em Python, utilizando a biblioteca \textit{http.server} e \textit{requests}. O servidor é configurado para rodar localmente na porta 4443 e o cliente realiza uma requisição HTTPS para o servidor, verificando a autenticidade do certificado digital.
+\begin{lstlisting}[language=Python]
+    import http.server
+    import ssl
+    import requests
+    import socket
+    from requests.exceptions import SSLError
+    import threading
+    import time
+\end{lstlisting}
 
-\begin{itemize}
-    \item \textbf{TLS 1.0 (1999)} - Primeira versão substituindo o SSL 3.0.
-    \item \textbf{TLS 1.1 (2006)} - Melhorias na proteção contra ataques de criptografia.
-    \item \textbf{TLS 1.2 (2008)} - Introdução do SHA-256 e maior segurança na troca de chaves.
-    \item \textbf{TLS 1.3 (2018)} - Redução da complexidade do handshake, maior eficiência e eliminação de algoritmos inseguros.
-\end{itemize}
+O código a seguir define um manipulador de requisições HTTPS que envia uma resposta simples ao cliente. Ele é responsável por tratar as requisições GET recebidas pelo servidor. A resposta enviada ao cliente é "Conexao segura estabelecida via HTTPS!". 
+\begin{lstlisting}[language=Python]
+    class HTTPSRequestHandler(http.server.SimpleHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'Conexao segura estabelecida via HTTPS!')
+\end{lstlisting}
 
-\section{Código Funcional em Python}
-O código abaixo demonstra uma conexão HTTPS em Python, verificando a validade do certificado:
+O comando a seguir define a função \textit{run\_server()}, que configura o servidor HTTPS na porta 4443. O servidor é configurado para utilizar um certificado digital autoassinado (\textit{server.pem}) e uma chave privada (\textit{server.key}). O contexto SSL é definido com o certificado e a chave, e o modo de segurança é ativado para o servidor. Por fim, o servidor é iniciado e fica aguardando requisições.
+\begin{lstlisting}[language=Python]
+    def run_server():
+        # Configurando o servidor HTTP
+        server_address = ('localhost', 4443)
+        httpd = http.server.HTTPServer(server_address, HTTPSRequestHandler)
+        
+        # Definindo o contexto SSL
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        context.load_cert_chain(certfile='server.pem', keyfile='server.key')
+    
+        # Ativando o modo de seguranca
+        httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
+        print("Servidor HTTPS rodando em https://localhost:4443")
+        httpd.serve_forever()
+\end{lstlisting}
 
-\begin{verbatim}
-import requests
-from requests.exceptions import SSLError
-import sys
+O código a seguir define a função \textit{run\_client()}, que realiza uma requisição HTTPS para o servidor configurado. A URL do servidor é definida como "https://localhost:4443". A função \textit{requests.get()} é utilizada para realizar a requisição, e o certificado do servidor (\textit{server.pem}) é verificado. Caso o certificado seja inválido, uma exceção \textit{SSLError} é lançada e a conexão é rejeitada.
+\begin{lstlisting}[language=Python]
+    def run_client():
+        # Configurando o cliente HTTPS
+        url = "https://localhost:4443"
+        try:
+            #response = requests.get(url, verify=False)  # Desativa a verificacao SSL (somente para testes!)
+            response = requests.get(url, verify="server.pem")
+            print("Resposta do servidor:", response.text)
+        # Tratamento de excecao para certificado invalido
+        except SSLError:
+            raise ValueError("Certificado invalido! Conexao rejeitada.")
+            sys.exit(1)
+\end{lstlisting}
 
-def run_client():
-    url = "https://localhost:4443"
-    try:
-        response = requests.get(url, verify="falsoserver.pem")
-        print("Resposta do servidor:", response.text)
-    except SSLError:
-        print("Erro: Certificado inválido! Conexão rejeitada.")
-        sys.exit(1)
-
-run_client()
-\end{verbatim}
+O código a seguir inicia o servidor HTTPS em uma \textit{thread} separada e aguarda 2 segundos para garantir que o servidor esteja rodando antes de iniciar o cliente. O servidor é iniciado chamando a função \textit{run\_server()} e o cliente é iniciado chamando a função \textit{run\_client()}.
+\begin{lstlisting}[language=Python]
+    # Criando um certificado autoassinado
+    server_thread = threading.Thread(target=run_server)
+    server_thread.daemon = True
+    server_thread.start()
+    time.sleep(2)  # Espera o servidor iniciar
+    run_client()
+\end{lstlisting}
 
 \section{Conclusão}
-A adoção de protocolos como TLS e HTTPS é essencial para garantir segurança na internet. A evolução dessas tecnologias reforça a proteção contra ataques e vulnerabilidades, tornando a comunicação digital mais confiável e eficiente.
+A adoção de protocolos como TLS e HTTPS é essencial para garantir segurança na internet. A evolução dessas tecnologias reforça a proteção contra ataques e vulnerabilidades, tornando a comunicação digital mais confiável e eficiente. O uso de certificados digitais e algoritmos de criptografia avançados assegura que as informações trocadas entre cliente e servidor permaneçam seguras e invioláveis.
 
 \end{document}
